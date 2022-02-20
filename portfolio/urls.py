@@ -4,7 +4,7 @@ from django.urls import path
 app_name = 'portfolio'
 urlpatterns = [
     path('', views.home, name='home'),
-    path(r'^home/$', views.home, name='home'),
+    path('home', views.home, name='home'),
     path('customer_list', views.customer_list, name='customer_list'),
     path('customer/create/', views.customer_new, name='customer_new'),
     path('customer/<int:pk>/edit/', views.customer_edit, name='customer_edit'),
