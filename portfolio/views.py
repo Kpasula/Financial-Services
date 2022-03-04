@@ -1,7 +1,16 @@
 from django.contrib.auth.decorators import login_required
+from django.db.models import Sum
+from django.http import HttpResponse
 from django.shortcuts import render, get_object_or_404, redirect
+from django.template.loader import get_template
+from rest_framework.response import Response
+from rest_framework.views import APIView
+from rest_framework import status
+
 from .models import *
 from .forms import *
+from .serializers import CustomerSerializer
+from .utils import render_to_pdf
 
 now = timezone.now()
 
@@ -40,6 +49,7 @@ def customer_delete(request, pk):
     customer.delete()
     return redirect('portfolio:customer_list')
 
+
 @login_required
 def customer_new(request):
     if request.method == "POST":
@@ -54,6 +64,7 @@ def customer_new(request):
     else:
         form = CustomerForm()
     return render(request, 'customer/customer_new.html', {'form': form})
+
 
 @login_required
 def stock_list(request):
@@ -92,6 +103,7 @@ def stock_edit(request, pk):
         form = StockForm(instance=stock)
     return render(request, 'stocks/stock_edit.html', {'form': form})
 
+
 @login_required
 def stock_delete(request, pk):
     stock = get_object_or_404(Stock, pk=pk)
@@ -125,7 +137,6 @@ def investment_list(request):
 def investment_edit(request, pk):
     investment = get_object_or_404(Investment, pk=pk)
     if request.method == "POST":
-        # update
         form = InvestmentForm(request.POST, instance=investment)
         if form.is_valid():
             investment = form.save()
@@ -144,3 +155,120 @@ def investment_delete(request, pk):
     investment = get_object_or_404(Investment, pk=pk)
     investment.delete()
     return redirect('portfolio:investment_list')
+
+
+@login_required
+def portfolio(request, pk):
+    customer = get_object_or_404(Customer, pk=pk)
+    customers = Customer.objects.filter(created_date__lte=timezone.now())
+    investments = Investment.objects.filter(customer=pk)
+    stocks = Stock.objects.filter(customer=pk)
+    sum_recent_value = Investment.objects.filter(customer=pk).aggregate(Sum('recent_value'))
+    sum_acquired_value = Investment.objects.filter(customer=pk).aggregate(Sum('acquired_value'))
+    sum_current_stocks_value = 0
+    sum_of_initial_stock_value = 0
+
+    for stock in stocks:
+        sum_current_stocks_value += stock.current_stock_value()
+        sum_of_initial_stock_value += stock.initial_stock_value()
+
+    return render(request, 'portfolio/portfolio.html', {'customers': customers,
+                                                        'investments': investments,
+                                                        'stocks': stocks,
+                                                        'sum_acquired_value': sum_acquired_value,
+                                                        'sum_recent_value': sum_recent_value,
+                                                        'sum_current_stocks_value': sum_current_stocks_value,
+                                                        'sum_of_initial_stock_value': sum_of_initial_stock_value,
+                                                        'customer':customer,})
+
+
+class CustomerList(APIView):
+
+    def get(self, request):
+        customers_json = Customer.objects.all()
+        serializer = CustomerSerializer(customers_json, many=True)
+        return Response(serializer.data)
+
+
+@login_required
+def portfolio_pdf(request, pk):
+    customer = get_object_or_404(Customer, pk=pk)
+    customers = Customer.objects.filter(created_date__lte=timezone.now())
+    investments = Investment.objects.filter(customer=pk)
+    stocks = Stock.objects.filter(customer=pk)
+    sum_recent_value = Investment.objects.filter(customer=pk).aggregate(Sum('recent_value'))
+    sum_acquired_value = Investment.objects.filter(customer=pk).aggregate(Sum('acquired_value'))
+    sum_current_stocks_value = 0
+    sum_of_initial_stock_value = 0
+    for stock in stocks:
+        sum_current_stocks_value += stock.current_stock_value()
+        sum_of_initial_stock_value += stock.initial_stock_value()
+
+    template = get_template('portfolio/portfolio_pdf.html')
+    context = {'customers': customers,
+               'investments': investments,
+               'stocks': stocks,
+               'sum_acquired_value': sum_acquired_value,
+               'sum_recent_value': sum_recent_value,
+               'sum_current_stocks_value': sum_current_stocks_value,
+               'sum_of_initial_stock_value': sum_of_initial_stock_value,
+               }
+    html = template.render(context)
+    pdf = render_to_pdf('portfolio/portfolio_pdf.html', context)
+    if pdf:
+        response = HttpResponse(pdf, content_type='application/pdf')
+        filename = "Customers_%s.pdf" % ("portfolio")
+        content = "inline; filename='%s'" % (filename)
+        download = request.GET.get("download")
+        if download:
+            content = "attachment; filename='%s'" % (filename)
+        response['Content-Disposition'] = content
+        return response
+    return HttpResponse("Not found")
+
+
+@login_required
+def mutual_funds_list(request):
+    mutualfunds = MutualFund.objects.filter(acquired_date__lte=timezone.now())
+    return render(request, 'mutual_funds/mutual_funds_list.html', {'mutualfunds': mutualfunds})
+
+
+@login_required
+def mutual_funds_new(request):
+    if request.method == "POST":
+        form = MutualFundForm(request.POST)
+        if form.is_valid():
+            mutualfund = form.save(commit=False)
+            mutualfund.created_date = timezone.now()
+            mutualfund.save()
+            mutualfunds = MutualFund.objects.filter(acquired_date__lte=timezone.now())
+            return render(request, 'mutual_funds/mutual_funds_list.html',
+                          {'mutualfunds': mutualfunds})
+    else:
+        form = MutualFundForm()
+    return render(request, 'mutual_funds/mutual_funds_new.html', {'form': form})
+
+
+@login_required
+def mutual_funds_edit(request, pk):
+    mutualfund = get_object_or_404(MutualFund, pk=pk)
+    if request.method == "POST":
+        form = MutualFundForm(request.POST, instance=mutualfund)
+        if form.is_valid():
+            mutualfund = form.save()
+
+            mutualfund.updated_date = timezone.now()
+            mutualfund.save()
+            mutualfunds = MutualFund.objects.filter(acquired_date__lte=timezone.now())
+            return render(request, 'mutual_funds/mutual_funds_list.html', {'mutualfunds': mutualfunds})
+    else:
+        form = MutualFundForm(instance=mutualfund)
+    return render(request, 'mutual_funds/mutual_funds_edit.html', {'form': form})
+
+
+@login_required
+def mutual_funds_delete(request, pk):
+    mutualfund = get_object_or_404(MutualFund, pk=pk)
+    mutualfund.delete()
+    mutualfunds = MutualFund.objects.filter(acquired_date__lte=timezone.now())
+    return render(request, 'mutual_funds/mutual_funds_list.html', {'mutualfunds': mutualfunds})
