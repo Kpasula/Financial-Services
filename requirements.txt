@@ -7,3 +7,6 @@ gunicorn==20.1.0
 requests==2.27.1
 xhtml2pdf~=0.2.5
 reportlab==3.6.6
+psycopg
+psycopg2
+django-heroku
