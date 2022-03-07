@@ -50,10 +50,24 @@
                     <td>{{ mutualfund.current_value}}</td>
                     <td>{{ mutualfund.acquired_date  }}</td>
                     <td><a href="{% url 'portfolio:mutual_funds_edit' pk=mutualfund.pk %}"
-                           class="btn btn-warning">Edit</a></td>
+                           class="btn btn-warning" style="background-color: lightcoral;
+                                          border: none;
+                                          color: white;
+                                          padding: 5px 20px;
+                                          text-align: center;
+                                          text-decoration: none;
+                                          display: inline-block;
+                                          font-size: 16px;">Edit</a></td>
                     <td><a href="{% url 'portfolio:mutual_funds_delete' pk=mutualfund.pk %}"
                            onclick="return confirm('Are you sure you want to delete?')"
-                           class="btn btn-danger">Delete</a>
+                           class="btn btn-danger" style="background-color: firebrick;
+                                          border: none;
+                                          color: white;
+                                          padding: 5px 20px;
+                                          text-align: center;
+                                          text-decoration: none;
+                                          display: inline-block;
+                                          font-size: 16px;">Delete</a>
                     </td>
                 </tr>
             {% endfor %}
@@ -61,7 +75,14 @@
         </table>
      <div class="row">
             <a href="{% url 'portfolio:mutual_funds_new' %}" class="row"><span
-                    class="btn btn-primary">Add Mutual Fund</span></a>
+                    class="btn btn-primary" style="background-color: darkcyan;
+                                          border: none;
+                                          color: white;
+                                          padding: 5px 20px;
+                                          text-align: center;
+                                          text-decoration: none;
+                                          display: inline-block;
+                                          font-size: 16px;">Add Mutual Fund</span></a>
         </div>
     </div>
     </body>

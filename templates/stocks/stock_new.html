@@ -4,6 +4,14 @@
     <h1>Add a New Stock</h1>
     <form method="POST" class="stock-form">{% csrf_token %}
           {{ form|crispy }}
-        <button type="submit" class="save btn btn-default">Save</button>
+        <button type="submit" class="save btn btn-default" style="background-color: teal
+        ;
+                                          border: none;
+                                          color: white;
+                                          padding: 5px 20px;
+                                          text-align: center;
+                                          text-decoration: none;
+                                          display: inline-block;
+                                          font-size: 16px;">Save</button>
     </form>
 {% endblock %}

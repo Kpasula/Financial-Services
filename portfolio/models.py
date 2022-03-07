@@ -15,6 +15,7 @@ class Customer(models.Model):
     zipcode = models.CharField(max_length=10)
     email = models.EmailField(max_length=200)
     cell_phone = models.CharField(max_length=50)
+    income = models.IntegerField(blank=False, null=False, default='00000')
     created_date = models.DateTimeField(
         default=timezone.now)
     updated_date = models.DateTimeField(auto_now_add=True)
@@ -76,7 +77,7 @@ class Stock(models.Model):
     def current_stock_price(self):
         symbol_f = str(self.symbol)
         main_api = 'http://api.marketstack.com/v1/eod?'
-        api_key = 'access_key=e3212f29b2d504cbbc17b7da95fcff86&limit=1&symbols='
+        api_key = 'access_key=4feb66ee5d32cd786d05f15a93c298dc&limit=1&symbols='
         url = main_api + api_key + symbol_f
         json_data = requests.get(url).json()
         open_price = float(json_data["data"][0]["open"])

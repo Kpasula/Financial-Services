@@ -167,6 +167,14 @@ def portfolio(request, pk):
     sum_acquired_value = Investment.objects.filter(customer=pk).aggregate(Sum('acquired_value'))
     sum_current_stocks_value = 0
     sum_of_initial_stock_value = 0
+    convert_base_url = 'http://api.currencylayer.com/live?access_key='
+    convert_api_key = '3a46a6c078946b181b59a44282b3b305'
+    base_currency = '&source=USD'
+    convert_currency = '&currencies=EUR'
+    convert_format = '&format=1'
+    convert_url = convert_base_url + convert_api_key + convert_currency + base_currency + convert_format
+    rates = requests.get(convert_url).json()
+    eur_conv_rate = rates["quotes"]["USDEUR"]
 
     for stock in stocks:
         sum_current_stocks_value += stock.current_stock_value()
@@ -179,7 +187,9 @@ def portfolio(request, pk):
                                                         'sum_recent_value': sum_recent_value,
                                                         'sum_current_stocks_value': sum_current_stocks_value,
                                                         'sum_of_initial_stock_value': sum_of_initial_stock_value,
-                                                        'customer':customer,})
+                                                        'customer':customer,
+                                                        'eur_conv_rate': eur_conv_rate,
+                                                        })
 
 
 class CustomerList(APIView):

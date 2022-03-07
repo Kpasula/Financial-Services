@@ -3,6 +3,7 @@
 {% load humanize %}
 {% block content %}
 
+
     <html>
             <head>
                 <meta charset="UTF-8">
@@ -29,7 +30,15 @@
     <h1 style="padding-left: 15Px">Customer Portfolio</h1>
 </div>
                      <div><a href="{%  url 'portfolio:portfolio_pdf' pk=customer.pk %}"
-                            class="btn btn-primary" style="float: right;" >Export PDF</a></div>
+                            class="btn btn-primary" style="background-color: slategrey;
+                                          border: none;
+                                          color: white;
+                                          padding: 5px 20px;
+                                          text-align: center;
+                                          text-decoration: none;
+                                          display: inline-block;
+                                          font-size: 16px;
+                                            float: right;" >Export PDF</a></div>
 
 <div class="row">
     <h2 style="padding-left: 15Px">Overall Portfolio Performance</h2>
@@ -40,7 +49,8 @@
         <tr class="bg-info">
             <th>Portfolio Initial Investments</th>
             <th>Portfolio Current Investments</th>
-            <th>Grand Total Results</th>
+            <th>Grand Total Results(USD)</th>
+            <th>Grand Total Results(EUR)</th>
         </tr>
         </thead>
         <tbody>
@@ -48,6 +58,7 @@
                 <td>{{ sum_acquired_value.acquired_value__sum | add:sum_of_initial_stock_value | intcomma }}</td>
                 <td>{{ sum_recent_value.recent_value__sum | add:sum_current_stocks_value | intcomma }}</td>
                 <td>{{ sum_recent_value.recent_value__sum | sub:sum_acquired_value.acquired_value__sum | add:sum_current_stocks_value | sub:sum_of_initial_stock_value | intcomma }}</td>
+                <td>{{ sum_recent_value.recent_value__sum | sub:sum_acquired_value.acquired_value__sum | add:sum_current_stocks_value | sub:sum_of_initial_stock_value | mul:eur_conv_rate | intcomma }}</td>
             </tr>
         </tbody>
     </table>
@@ -66,6 +77,11 @@
             <th>Shares</th>
             <th>Initial Stock Price</th>
             <th>Initial Stock Value</th>
+            <th>Current Stock Price</th>
+            <th>Current Stock value</th>
+
+            <th>Number of Shares you can buy with the income</th>
+
 
         </tr>
         </thead>
@@ -77,8 +93,10 @@
                 <td>{{ stock.name }}</td>
                 <td>{{ stock.shares|intcomma }}</td>
                 <td>{{ stock.purchase_price|intcomma }}</td>
-                <td>{{ stock.initial_stock_value|intcomma}}
-
+                <td>{{ stock.initial_stock_value|intcomma }}</td>
+                <td>{{ stock.current_stock_price | intcomma }}</td>
+                <td>{{ stock.current_stock_value | intcomma }}</td>
+                <td>{{ customer.income | div:stock.current_stock_price }}</td>
             </tr>
 
         {% endfor %}
@@ -91,8 +109,10 @@
         <thead>
         <tr class="bg-info">
             <th>Total of Initial Stocks</th>
-            <th>Total of Current CCurrent</th>
-            <th>Result</th>
+            <th>Total of Current Stocks</th>
+
+                   <th>Results (USD)</th>
+                <th>Results (EUR)</th>
         </tr>
         </thead>
         <tbody>
@@ -100,6 +120,7 @@
                 <td>{{ sum_of_initial_stock_value | intcomma }}</td>
                 <td>{{ sum_current_stocks_value | intcomma }}</td>
                 <td>{{ sum_current_stocks_value | sub:sum_of_initial_stock_value | intcomma }}</td>
+                <td>{{ sum_current_stocks_value | sub:sum_of_initial_stock_value | mul:eur_conv_rate | intcomma }}</td>
             </tr>
         </tbody>
     </table>
@@ -143,7 +164,8 @@
         <tr class="bg-info">
             <th>Total of Initial Investments</th>
             <th>Total of Current Investments</th>
-            <th>Result</th>
+            <th>Results(USD)</th>
+            <th>Results(EUR)</th>
         </tr>
         </thead>
         <tbody>
@@ -151,8 +173,10 @@
                 <td>{{ sum_acquired_value.acquired_value__sum | intcomma }}</td>
                 <td>{{ sum_recent_value.recent_value__sum | intcomma }}</td>
                 <td>{{ sum_recent_value.recent_value__sum | sub:sum_acquired_value.acquired_value__sum | intcomma }}</td>
+                <td>{{ sum_recent_value.recent_value__sum | sub:sum_acquired_value.acquired_value__sum | mul:eur_conv_rate | intcomma }}</td>
             </tr>
         </tbody>
     </table>
 </div></div>
+    
 {% endblock %}

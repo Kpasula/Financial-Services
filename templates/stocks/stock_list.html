@@ -51,10 +51,24 @@
                     <td>{{ stock.purchase_price }}</td>
                     <td>{{ stock.purchase_date }}</td>
                     <td><a href="{% url 'portfolio:stock_edit' pk=stock.pk %}"
-                           class="btn btn-warning">Edit</a></td>
+                           class="btn btn-warning" style="background-color: lightcoral;
+                                          border: none;
+                                          color: white;
+                                          padding: 5px 20px;
+                                          text-align: center;
+                                          text-decoration: none;
+                                          display: inline-block;
+                                          font-size: 16px;">Edit</a></td>
                     <td><a href="{% url 'portfolio:stock_delete' pk=stock.pk %}"
                     onclick="return confirm('Are you sure you want to delete?')"
-                    class="btn btn-danger">Delete</a>
+                    class="btn btn-danger" style="background-color: firebrick;
+                                          border: none;
+                                          color: white;
+                                          padding: 5px 20px;
+                                          text-align: center;
+                                          text-decoration: none;
+                                          display: inline-block;
+                                          font-size: 16px;">Delete</a>
                     </td>
 
 
@@ -64,7 +78,14 @@
         </table>
         <div class="row">
             <a href="{% url 'portfolio:stock_new' %}" class="row"><span
-                    class="btn btn-primary">Add Stock</span></a>
+                    class="btn btn-primary" style="background-color: darkcyan;
+                                          border: none;
+                                          color: white;
+                                          padding: 5px 20px;
+                                          text-align: center;
+                                          text-decoration: none;
+                                          display: inline-block;
+                                          font-size: 16px;">Add Stock</span></a>
 
         </div>
     </div>
