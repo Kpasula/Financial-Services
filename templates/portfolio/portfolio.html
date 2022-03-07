@@ -55,10 +55,10 @@
         </thead>
         <tbody>
          <tr>
-                <td>{{ sum_acquired_value.acquired_value__sum | add:sum_of_initial_stock_value | intcomma }}</td>
-                <td>{{ sum_recent_value.recent_value__sum | add:sum_current_stocks_value | intcomma }}</td>
-                <td>{{ sum_recent_value.recent_value__sum | sub:sum_acquired_value.acquired_value__sum | add:sum_current_stocks_value | sub:sum_of_initial_stock_value | intcomma }}</td>
-                <td>{{ sum_recent_value.recent_value__sum | sub:sum_acquired_value.acquired_value__sum | add:sum_current_stocks_value | sub:sum_of_initial_stock_value | mul:eur_conv_rate | intcomma }}</td>
+                <td>{{ sum_acquired_value.acquired_value__sum | add:sum_of_initial_stock_value | floatformat:2 | intcomma }}</td>
+                <td>{{ sum_recent_value.recent_value__sum | add:sum_current_stocks_value | floatformat:2 | intcomma }}</td>
+                <td>{{ sum_recent_value.recent_value__sum | sub:sum_acquired_value.acquired_value__sum | add:sum_current_stocks_value | sub:sum_of_initial_stock_value | floatformat:2 | intcomma }}</td>
+                <td>{{ sum_recent_value.recent_value__sum | sub:sum_acquired_value.acquired_value__sum | add:sum_current_stocks_value | sub:sum_of_initial_stock_value | mul:eur_conv_rate | floatformat:2 | intcomma }}</td>
             </tr>
         </tbody>
     </table>
@@ -91,12 +91,12 @@
                 <td>{{ stock.customer }}</td>
                 <td>{{ stock.symbol }}</td>
                 <td>{{ stock.name }}</td>
-                <td>{{ stock.shares|intcomma }}</td>
-                <td>{{ stock.purchase_price|intcomma }}</td>
-                <td>{{ stock.initial_stock_value|intcomma }}</td>
-                <td>{{ stock.current_stock_price | intcomma }}</td>
-                <td>{{ stock.current_stock_value | intcomma }}</td>
-                <td>{{ customer.income | div:stock.current_stock_price }}</td>
+                <td>{{ stock.shares | floatformat:2 | intcomma }}</td>
+                <td>{{ stock.purchase_price | floatformat:2 | intcomma }}</td>
+                <td>{{ stock.initial_stock_value | floatformat:2 | intcomma }}</td>
+                <td>{{ stock.current_stock_price | floatformat:2 | intcomma }}</td>
+                <td>{{ stock.current_stock_value | floatformat:2 | intcomma }}</td>
+                <td>{{ customer.income | div:stock.current_stock_price | floatformat:2 }}</td>
             </tr>
 
         {% endfor %}
@@ -117,10 +117,10 @@
         </thead>
         <tbody>
          <tr>
-                <td>{{ sum_of_initial_stock_value | intcomma }}</td>
-                <td>{{ sum_current_stocks_value | intcomma }}</td>
+                <td>{{ sum_of_initial_stock_value | floatformat:2 | intcomma }}</td>
+                <td>{{ sum_current_stocks_value | floatformat:2 | intcomma }}</td>
                 <td>{{ sum_current_stocks_value | sub:sum_of_initial_stock_value | intcomma }}</td>
-                <td>{{ sum_current_stocks_value | sub:sum_of_initial_stock_value | mul:eur_conv_rate | intcomma }}</td>
+                <td>{{ sum_current_stocks_value | sub:sum_of_initial_stock_value | mul:eur_conv_rate | floatformat:2 | intcomma }}</td>
             </tr>
         </tbody>
     </table>
@@ -170,10 +170,10 @@
         </thead>
         <tbody>
          <tr>
-                <td>{{ sum_acquired_value.acquired_value__sum | intcomma }}</td>
-                <td>{{ sum_recent_value.recent_value__sum | intcomma }}</td>
-                <td>{{ sum_recent_value.recent_value__sum | sub:sum_acquired_value.acquired_value__sum | intcomma }}</td>
-                <td>{{ sum_recent_value.recent_value__sum | sub:sum_acquired_value.acquired_value__sum | mul:eur_conv_rate | intcomma }}</td>
+                <td>{{ sum_acquired_value.acquired_value__sum | floatformat:2 | intcomma }}</td>
+                <td>{{ sum_recent_value.recent_value__sum | floatformat:2 | intcomma }}</td>
+                <td>{{ sum_recent_value.recent_value__sum | sub:sum_acquired_value.acquired_value__sum | floatformat:2 | intcomma }}</td>
+                <td>{{ sum_recent_value.recent_value__sum | sub:sum_acquired_value.acquired_value__sum | mul:eur_conv_rate | floatformat:2 | intcomma }}</td>
             </tr>
         </tbody>
     </table>
