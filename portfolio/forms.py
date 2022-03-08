@@ -1,6 +1,6 @@
 from django import forms
 from django.contrib.admin.widgets import AdminDateWidget
-from django.forms import DateTimeInput
+from django.forms import DateTimeInput, DateInput
 
 from .models import Customer, Stock, Investment, MutualFund
 
@@ -16,7 +16,7 @@ class StockForm(forms.ModelForm):
         model = Stock
         fields = ('customer', 'symbol', 'name', 'shares', 'purchase_price', 'purchase_date',)
         widgets = {
-            'purchase_date': DateTimeInput(attrs={'type': 'datetime-local'}),
+            'purchase_date': DateInput(attrs={'type': 'date'}),
         }
 
 
@@ -26,8 +26,8 @@ class InvestmentForm(forms.ModelForm):
         fields = ('customer', 'category', 'description', 'acquired_value', 'acquired_date', 'recent_value',
                   'recent_date',)
         widgets = {
-            'acquired_date': DateTimeInput(attrs={'type': 'datetime-local'}),
-            'recent_date': DateTimeInput(attrs={'type': 'datetime-local'}),
+            'acquired_date': DateInput(attrs={'type': 'date'}),
+            'recent_date': DateInput(attrs={'type': 'date'}),
         }
 
 
@@ -36,5 +36,5 @@ class MutualFundForm(forms.ModelForm):
         model = MutualFund
         fields = ('customer', 'plan', 'investment_amount', 'current_value', 'acquired_date',)
         widgets = {
-            'acquired_date': DateTimeInput(attrs={'type': 'datetime-local'}),
+            'acquired_date': DateInput(attrs={'type': 'date'}),
         }
