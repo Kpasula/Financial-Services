@@ -1,5 +1,4 @@
 {% load static %}
-
 <html lang="en">
 <head>
     <title>Eagle Financial Services</title>
@@ -73,7 +72,6 @@
                 <li><a href="{% url 'portfolio:investment_list' %}">Investments</a></li>
                 <li><a href="{% url 'portfolio:stock_list' %}">Stocks</a></li>
                 <li><a href="{% url 'portfolio:mutual_funds_list' %}">Mutual Funds</a></li>
-
             </ul>
             <ul class="nav navbar-nav navbar-right">
                 {% if user.is_authenticated %}

@@ -3,10 +3,8 @@
 {% block content %}
     {% if user.is_authenticated %}
         <div class="page-container">
-
             <h2 class="top-menu">Hello {{ user.username }},</h2>
             <p>Please choose from below options.</p>
-
         </div>
     {% endif %}
     <div class="content container">
@@ -75,13 +73,13 @@
                             </div>
                         </div>
                         <div class="col-md-3">
-                                    <div class="thumbnail">
-                                        <img src="{% static "images/mutual_funds.jpg" %}" alt="mutual funds"/>
-                                        <div class="caption">
-                                            <h2>Mutual Funds</h2>
-                                            <p>We will help you with mutual fund investments.</p>
-                                            <p><a class="btn btn-primary" href="{% url 'portfolio:mutual_funds_list' %}"
-                                                  role="button" style="background-color: lightseagreen;
+                            <div class="thumbnail">
+                                <img src="{% static "images/mutual_funds.jpg" %}" alt="mutual funds"/>
+                                <div class="caption">
+                                    <h2>Mutual Funds</h2>
+                                    <p>We will help you with mutual fund investments.</p>
+                                    <p><a class="btn btn-primary" href="{% url 'portfolio:mutual_funds_list' %}"
+                                          role="button" style="background-color: lightseagreen;
                                           border: none;
                                           color: white;
                                           padding: 5px 20px;
@@ -89,10 +87,10 @@
                                           text-decoration: none;
                                           display: inline-block;
                                           font-size: 16px;">View
-                                                details &raquo;</a></p>
-                                        </div>
-                                    </div>
+                                        details &raquo;</a></p>
                                 </div>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>

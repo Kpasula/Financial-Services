@@ -1,6 +1,5 @@
 from django import forms
-from django.contrib.admin.widgets import AdminDateWidget
-from django.forms import DateTimeInput, DateInput
+from django.forms import DateInput
 
 from .models import Customer, Stock, Investment, MutualFund
 

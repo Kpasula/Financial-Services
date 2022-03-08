@@ -3,7 +3,6 @@
 {% load crispy_forms_tags %}
 {% block content %}
 <body>
-
     <h1 style="color: black">Add a Mutual Fund</h1>
     <form method="POST" class="mutual-fund-form" style="color: black">{% csrf_token %}
             {{ form|crispy }}

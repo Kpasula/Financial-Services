@@ -3,10 +3,9 @@ from django.db.models import Sum
 from django.http import HttpResponse
 from django.shortcuts import render, get_object_or_404, redirect
 from django.template.loader import get_template
+from rest_framework import status
 from rest_framework.response import Response
 from rest_framework.views import APIView
-from rest_framework import status
-
 from .models import *
 from .forms import *
 from .serializers import CustomerSerializer
@@ -189,17 +188,28 @@ def portfolio(request, pk):
                                                         'sum_recent_value': sum_recent_value,
                                                         'sum_current_stocks_value': sum_current_stocks_value,
                                                         'sum_of_initial_stock_value': sum_of_initial_stock_value,
-                                                        'customer':customer,
+                                                        'customer': customer,
                                                         'eur_conv_rate': eur_conv_rate,
                                                         })
 
 
 class CustomerList(APIView):
+    def get(self, request, *args, **kwargs):
+        try:
+            cust_num = request.query_params["cust_num"]
+            if cust_num:
+                if not Customer.objects.filter(cust_number=cust_num).exists():
+                    return Response(
+                        {"res": "Object with customer_number does not exists"},
+                        status=status.HTTP_400_BAD_REQUEST)
+                customer = Customer.objects.get(cust_number=cust_num)
+                serializer = CustomerSerializer(customer)
+                return Response(serializer.data)
 
-    def get(self, request):
-        customers_json = Customer.objects.all()
-        serializer = CustomerSerializer(customers_json, many=True)
-        return Response(serializer.data)
+        except:
+            customers_json = Customer.objects.all()
+            serializer = CustomerSerializer(customers_json, many=True)
+            return Response(serializer.data)
 
 
 @login_required
@@ -284,3 +294,4 @@ def mutual_funds_delete(request, pk):
     mutualfund.delete()
     mutualfunds = MutualFund.objects.filter(acquired_date__lte=timezone.now())
     return render(request, 'mutual_funds/mutual_funds_list.html', {'mutualfunds': mutualfunds})
+
